@@ -1,26 +1,38 @@
 const seedMusician = [
-    {
-      name: 'Mick Jagger',
-      instrument: 'Voice'
-    },
-    {
-      name: 'Drake',
-      instrument: 'Voice',
-    },
-    {
-      name: 'Jimi Hendrix',
-      instrument: 'Guitar'
-    }
+  {
+    name: 'Lisa',
+    instrument: 'Voice',
+  },
+  {
+    name: 'Jennie',
+    instrument: 'Voice',
+  },
+  {
+    name: 'Travis Barker',
+    instrument: 'Drums'
+  },
+  {
+    name: 'Mick Jagger',
+    instrument: 'Voice'
+  },
+  {
+    name: 'Drake',
+    instrument: 'Voice',
+  },
+  {
+    name: 'Jimi Hendrix',
+    instrument: 'Guitar'
+  }
 ]
 
 const seedBand = [
   {
-    name: 'The Beatles',
-    genre: 'Rock'
+    name: 'Black Pink',
+    genre: 'Pop'
   },
   {
-    name: 'Black Pink',
-    genre: 'Pop',
+    name: 'Blink 182',
+    genre: 'Alternative Rock',
   },
   {
     name: 'Coldplay',
