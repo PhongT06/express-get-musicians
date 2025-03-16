@@ -25,7 +25,7 @@ describe('GET /musicians/:id', () => {
         expect(response.statusCode).toBe(200);
         const responseData = JSON.parse(response.text);
         expect(responseData).toHaveProperty('id', 1);
-        expect(responseData).toHaveProperty('name', 'Mick Jagger');
+        expect(responseData).toHaveProperty('name', 'Lisa');
     });
 });
 
@@ -35,7 +35,7 @@ describe('POST /musicians', () => {
         const response = await request(app)
             .post('/musicians')
             .send(newMusician);
-        expect(response.statusCode).toBe(200);
+        expect(response.statusCode).toBe(201);
         const responseData = JSON.parse(response.text);
         expect(responseData).toHaveProperty('name', 'Taylor Swift');
         expect(responseData).toHaveProperty('instrument', 'Guitar');
@@ -45,7 +45,7 @@ describe('POST /musicians', () => {
 describe('PUT /musicians/:id', () => {
     test('should update musician with id 1 and return updated data', async () => {
         const updatedMusician = {
-            name: 'Steven Tyler',
+            name: 'Jisoo',
             instrument: 'Vocals'
         };
         const response = await request(app)
@@ -53,14 +53,87 @@ describe('PUT /musicians/:id', () => {
             .send(updatedMusician);
         expect(response.statusCode).toBe(200);
         const responseData = JSON.parse(response.text);
-        expect(responseData).toHaveProperty('name', 'Steven Tyler');
+        expect(responseData).toHaveProperty('name', 'Jisoo');
         expect(responseData).toHaveProperty('instrument', 'Vocals');
     });
 });
 
 describe('DELETE /musicians/:id', () => {
     test('should delete musician with id 2 and return 204 status', async () => {
-        const response = await request(app).delete('/musicians/2');
+        const response = await request(app).delete('/musicians/5');
         expect(response.statusCode).toBe(204);
+    });
+});
+
+describe('GET /bands', () => {
+    test('should return status 200', async () => {
+        const response = await request(app).get('/bands');
+        expect(response.statusCode).toBe(200);
+    });
+
+    test('should return an array of bands', async () => {
+        const response = await request(app).get('/bands');
+        expect(Array.isArray(response.body)).toBe(true);
+    });
+
+    test('should return the correct number of bands', async () => {
+        const response = await request(app).get('/bands');
+        expect(response.body.length).toBe(3);
+    });
+
+    test('should return bands with associated musicians', async () => {
+        const response = await request(app).get('/bands');
+        expect(response.body).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    id: 1,
+                    name: "Black Pink",
+                    genre: "Pop",
+                    musicians: expect.arrayContaining([
+                        expect.objectContaining({ name: "Jisoo", instrument: "Vocals" }),
+                        expect.objectContaining({ name: "Lisa", instrument: "Vocals" })
+                    ])
+            }),
+            expect.objectContaining({
+                id: 2,
+                name: "Blink 182",
+                genre: "Alternative Rock",
+                musicians: expect.arrayContaining([
+                    expect.objectContaining({ name: "Travis Barker", instrument: "Drums" })
+                ])
+            }),
+            expect.objectContaining({
+                id: 3,
+                name: "Coldplay",
+                genre: "Rock",
+                musicians: expect.arrayContaining([
+                    expect.objectContaining({ name: "Mick Jagger", instrument: "Voice" }),
+                    expect.objectContaining({ name: "Jimi Hendrix", instrument: "Guitar" })
+                ])
+            })
+            ])
+        );
+    });
+});
+
+describe('GET /bands/:id', () => {
+    test('should return status 200 for a valid band ID', async () => {
+        const response = await request(app).get('/bands/1');
+        expect(response.statusCode).toBe(200);
+    });
+
+    test('should return the correct band with musicians', async () => {
+        const response = await request(app).get('/bands/1');
+        expect(response.body).toEqual(
+            expect.objectContaining({
+            id: 1,
+            name: "Black Pink",
+            genre: "Pop",
+            musicians: expect.arrayContaining([
+                expect.objectContaining({ name: "Jisoo", instrument: "Vocals" }),
+                expect.objectContaining({ name: "Lisa", instrument: "Vocals" })
+            ])  
+            })
+        );
     });
 });
